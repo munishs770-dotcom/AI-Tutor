@@ -1,0 +1,30 @@
+{
+  "name": "ai-tutor-project",
+  "version": "1.0.0",
+  "description": "Arya AI Tutor - Class 8 Mathematics Personalized Learning Assistant",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "echo 'Build complete'"
+  },
+  "keywords": [
+    "ai-tutor",
+    "math",
+    "education",
+    "class-8",
+    "socratic",
+    "firebase",
+    "vercel"
+  ],
+  "author": "Arya AI EdTech Team",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0"
+  },
+  "devDependencies": {
+    "puppeteer": "^25.16.0"
+  }
+}
