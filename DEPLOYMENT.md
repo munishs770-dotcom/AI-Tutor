@@ -11,7 +11,7 @@ This guide covers how to deploy the **Arya AI Tutor** application to **Vercel** 
 | :--- | :--- | :--- | :--- |
 | **Frontend** | Vanilla ES6 Modules + Glassmorphism CSS | `index.html`, `css/`, `js/` | Responsive SPA with 9 learning views, KaTeX math typesetting, and balance scale simulation. |
 | **Vercel Serverless** | Express.js / Node.js Engine | `api/index.js`, `vercel.json` | Handles REST API endpoints serverlessly on Vercel with zero cold-start delay. |
-| **Backend API** | Express.js REST API | `server.js` | 12 endpoints: health, AI proxy, student sync, quiz sync, doubts log, admin analytics. |
+| **Backend API** | Express.js REST API | `api/server.js` | 12 endpoints: health, AI proxy, student sync, quiz sync, doubts log, admin analytics. |
 | **Cloud Database** | Firebase Cloud Firestore | `js/modules/firebase-service.js` | Real-time storage of learner profiles, problem attempts, quiz results, and teacher cohorts. |
 | **Database Security**| Firestore Security Rules | `firestore.rules` | Production-grade role-based access control (Student vs Teacher/Admin). |
 | **CLI Deployment** | Firebase CLI Config | `firebase.json`, `firestore.indexes.json`| Deploys security rules and composite indexes directly with `firebase deploy`. |

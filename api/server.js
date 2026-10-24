@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 8080;
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname, '..')));
 
 // In-Memory Database / Cache (syncs with Firebase Firestore when credentials provided)
 const db = {
@@ -385,7 +385,7 @@ app.use((req, res) => {
   if (path.extname(req.path)) {
     return res.status(404).type('text/plain').send('File not found');
   }
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
 
 // Start Express Server (only when run directly)
