@@ -377,8 +377,14 @@ app.get('/api/sync/history/:studentId', (req, res) => {
   });
 });
 
-// Fallback: Serve Single Page Application
+// Fallback: Serve Single Page Application (only for clean HTML navigation routes, NOT for static assets or APIs)
 app.use((req, res) => {
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).json({ error: 'Endpoint not found', path: req.path });
+  }
+  if (path.extname(req.path)) {
+    return res.status(404).type('text/plain').send('File not found');
+  }
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
