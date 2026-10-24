@@ -1,24 +1,4 @@
 {
-  "functions": {
-    "server.js": {
-      "includeFiles": [
-        "css/**/*",
-        "js/**/*",
-        "assets/**/*",
-        "index.html",
-        "project-report.html"
-      ]
-    },
-    "api/index.js": {
-      "includeFiles": [
-        "css/**/*",
-        "js/**/*",
-        "assets/**/*",
-        "index.html",
-        "project-report.html"
-      ]
-    }
-  },
   "rewrites": [
     {
       "source": "/api/(.*)",

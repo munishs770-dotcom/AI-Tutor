@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 8080;
 
 app.use(cors());
 app.use(express.json());
-const staticDir = fs.existsSync(path.join(process.cwd(), 'css')) ? process.cwd() : __dirname;
+const staticDir = fs.existsSync(path.join(__dirname, 'public')) ? path.join(__dirname, 'public') : (fs.existsSync(path.join(process.cwd(), 'css')) ? process.cwd() : __dirname);
 app.use(express.static(staticDir));
 
 // In-Memory Database / Cache (syncs with Firebase Firestore when credentials provided)
