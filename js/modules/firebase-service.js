@@ -23,18 +23,25 @@ export class FirebaseService {
     const saved = localStorage.getItem("ai_tutor_firebase_config");
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        if (parsed.projectId === 'ai-tutor-class8') {
+          localStorage.removeItem("ai_tutor_firebase_config");
+        } else {
+          return parsed;
+        }
       } catch (e) {
         console.warn("Failed to parse cached firebase config:", e);
       }
     }
     return {
-      apiKey: localStorage.getItem("firebase_api_key") || "",
-      authDomain: "ai-tutor-class8.firebaseapp.com",
-      projectId: "ai-tutor-class8",
-      storageBucket: "ai-tutor-class8.appspot.com",
-      messagingSenderId: "1029384756",
-      appId: "1:1029384756:web:abcdef123456"
+      apiKey: "AIzaSyDUvcDc3_-ikRFVgW--5QdMlmcUZ7bB-6M",
+      authDomain: "arya-788ea.firebaseapp.com",
+      databaseURL: "https://arya-788ea-default-rtdb.firebaseio.com",
+      projectId: "arya-788ea",
+      storageBucket: "arya-788ea.firebasestorage.app",
+      messagingSenderId: "243810119050",
+      appId: "1:243810119050:web:940285e3aaa25c87c22c73",
+      measurementId: "G-LKQJWJY8GX"
     };
   }
 

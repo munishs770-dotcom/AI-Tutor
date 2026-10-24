@@ -18,6 +18,6 @@ scratch_check_pages.js
 Thumbs.db
 
 # Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# Firebase Service Account private keys
+*-firebase-adminsdk-*.json
+serviceAccountKey.json

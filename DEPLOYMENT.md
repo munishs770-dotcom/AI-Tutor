@@ -90,12 +90,14 @@ npx firebase deploy --only firestore:rules,firestore:indexes
 4. Copy the `firebaseConfig` object:
    ```javascript
    const firebaseConfig = {
-     apiKey: "AIzaSy...",
-     authDomain: "arya-ai-tutor.firebaseapp.com",
-     projectId: "arya-ai-tutor",
-     storageBucket: "arya-ai-tutor.appspot.com",
-     messagingSenderId: "123456789",
-     appId: "1:123456789:web:abcdef"
+     apiKey: "AIzaSyDUvcDc3_-ikRFVgW--5QdMlmcUZ7bB-6M",
+     authDomain: "arya-788ea.firebaseapp.com",
+     databaseURL: "https://arya-788ea-default-rtdb.firebaseio.com",
+     projectId: "arya-788ea",
+     storageBucket: "arya-788ea.firebasestorage.app",
+     messagingSenderId: "243810119050",
+     appId: "1:243810119050:web:940285e3aaa25c87c22c73",
+     measurementId: "G-LKQJWJY8GX"
    };
    ```
 
@@ -103,17 +105,18 @@ npx firebase deploy --only firestore:rules,firestore:indexes
 
 ## 🔐 4. Environment Variables on Vercel
 
-In your **Vercel Project Dashboard ➔ Settings ➔ Environment Variables**, add the following keys:
+In your **Vercel Project Dashboard ➔ Settings ➔ Environment Variables**, add the following keys (they are also already configured into your backend):
 
-| Environment Variable | Example Value | Description |
+| Environment Variable | Configured Value | Description |
 | :--- | :--- | :--- |
-| `FIREBASE_API_KEY` | `AIzaSyD-xxxxxxxxxxxx` | Web API Key from Firebase Console |
-| `FIREBASE_AUTH_DOMAIN`| `your-project.firebaseapp.com` | Firebase Auth Domain |
-| `FIREBASE_PROJECT_ID` | `your-project-id` | Firebase Project ID |
-| `FIREBASE_STORAGE_BUCKET`| `your-project-id.appspot.com` | Cloud Storage bucket |
-| `FIREBASE_MESSAGING_SENDER_ID`| `1029384756` | Sender ID |
-| `FIREBASE_APP_ID` | `1:1029384756:web:...` | Web Application ID |
-| `GEMINI_API_KEY` | `AIzaSyB-xxxxxxxxxxxx` | (Optional) Google Gemini API Key |
+| `FIREBASE_API_KEY` | `AIzaSyDUvcDc3_-ikRFVgW--5QdMlmcUZ7bB-6M` | Web API Key from Firebase Console |
+| `FIREBASE_AUTH_DOMAIN`| `arya-788ea.firebaseapp.com` | Firebase Auth Domain |
+| `FIREBASE_PROJECT_ID` | `arya-788ea` | Firebase Project ID |
+| `FIREBASE_STORAGE_BUCKET`| `arya-788ea.firebasestorage.app` | Cloud Storage bucket |
+| `FIREBASE_MESSAGING_SENDER_ID`| `243810119050` | Sender ID |
+| `FIREBASE_APP_ID` | `1:243810119050:web:940285e3aaa25c87c22c73` | Web Application ID |
+| `FIREBASE_MEASUREMENT_ID` | `G-LKQJWJY8GX` | Google Analytics ID |
+| `GEMINI_API_KEY` | `(Optional)` | Google Gemini API Key |
 
 > **Auto-Hydration:** The Express backend automatically serves these credentials to the client via `/api/config/firebase` so your live Vercel app automatically connects to your Firestore database without requiring students or teachers to enter keys manually!
 

@@ -316,13 +316,15 @@ app.post('/api/chat', async (req, res) => {
 // 8. Public Firebase Client Config Endpoint (Allows Vercel env vars to auto-hydrate frontend)
 app.get('/api/config/firebase', (req, res) => {
   res.json({
-    apiKey: process.env.FIREBASE_API_KEY || process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "",
-    authDomain: process.env.FIREBASE_AUTH_DOMAIN || process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "ai-tutor-class8.firebaseapp.com",
-    projectId: process.env.FIREBASE_PROJECT_ID || process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "ai-tutor-class8",
-    storageBucket: process.env.FIREBASE_STORAGE_BUCKET || process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "ai-tutor-class8.appspot.com",
-    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID || process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "",
-    appId: process.env.FIREBASE_APP_ID || process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "",
-    configured: Boolean(process.env.FIREBASE_API_KEY || process.env.NEXT_PUBLIC_FIREBASE_API_KEY)
+    apiKey: process.env.FIREBASE_API_KEY || process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyDUvcDc3_-ikRFVgW--5QdMlmcUZ7bB-6M",
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN || process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "arya-788ea.firebaseapp.com",
+    databaseURL: process.env.FIREBASE_DATABASE_URL || "https://arya-788ea-default-rtdb.firebaseio.com",
+    projectId: process.env.FIREBASE_PROJECT_ID || process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "arya-788ea",
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET || process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "arya-788ea.firebasestorage.app",
+    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID || process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "243810119050",
+    appId: process.env.FIREBASE_APP_ID || process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "1:243810119050:web:940285e3aaa25c87c22c73",
+    measurementId: process.env.FIREBASE_MEASUREMENT_ID || "G-LKQJWJY8GX",
+    configured: true
   });
 });
 
