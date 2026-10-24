@@ -51,9 +51,11 @@
 
     <!-- Header Actions -->
     <div class="header-actions">
-      <button class="btn-icon" id="header-cloud-btn" title="Cloud Database Status & Sync" style="border-color: rgba(52, 211, 153, 0.4); color: #34d399;">
-        <span id="header-cloud-icon">🟢</span> <span id="header-cloud-text">Cloud DB: Ready</span>
-      </button>
+      <!-- Role Badge Pill -->
+      <div class="header-role-pill" id="header-role-badge" title="Active Role Workspace">
+        <span id="role-icon">🎒</span> <span id="role-text">Student Mode</span>
+      </div>
+
       <button class="btn-icon" id="sound-toggle-btn" title="Toggle Sound Effects">
         🔊 Sound On
       </button>
@@ -63,12 +65,12 @@
       <button class="btn-icon" id="header-badges-btn" title="View Unlocked Badges">
         🏆 Badges
       </button>
-      <button class="btn-icon" id="header-settings-btn" title="AI Settings & Firebase Config">
+      <button class="btn-icon" id="header-settings-btn" title="AI Settings & Learner Preferences">
         ⚙️ Settings
       </button>
 
       <!-- Auth Controls -->
-      <button class="btn-icon" id="header-login-btn" style="background: var(--gradient-brand); color: #ffffff; border: none;" title="Sign In with Google / Email">
+      <button class="btn-icon" id="header-login-btn" style="background: var(--gradient-brand); color: #ffffff; border: none; font-weight: 600;" title="Sign In with Google / Email">
         🔑 Sign In
       </button>
       <button class="btn-icon" id="header-logout-btn" style="display: none;" title="Sign Out of Account">
@@ -90,51 +92,58 @@
     <!-- Sidebar Navigation -->
     <aside class="app-sidebar" id="app-sidebar">
       <div class="sidebar-top">
-        <div class="nav-section-title">Learning Core</div>
+        <!-- Home / Overview -->
+        <div class="nav-section-title">Overview</div>
         <nav class="nav-item-list">
-          <button class="nav-item active" data-view="learn" id="nav-btn-learn">
+          <button class="nav-item active" data-view="home" id="nav-btn-home">
+            <span class="nav-item-icon">🏠</span>
+            <span class="nav-item-label">Home Hub</span>
+          </button>
+        </nav>
+
+        <div class="nav-section-title" id="nav-title-learning">Student Learning Arena</div>
+        <nav class="nav-item-list" id="nav-list-student">
+          <button class="nav-item" data-view="learn" id="nav-btn-learn" data-role-req="student">
             <span class="nav-item-icon">🎓</span>
             <span class="nav-item-label">Learn Concepts</span>
           </button>
-          <button class="nav-item" data-view="practice" id="nav-btn-practice">
+          <button class="nav-item" data-view="practice" id="nav-btn-practice" data-role-req="student">
             <span class="nav-item-icon">✍️</span>
             <span class="nav-item-label">Practice Arena</span>
           </button>
-          <button class="nav-item" data-view="quiz" id="nav-btn-quiz">
+          <button class="nav-item" data-view="quiz" id="nav-btn-quiz" data-role-req="student">
             <span class="nav-item-icon">🏆</span>
             <span class="nav-item-label">Quiz Arena</span>
           </button>
-          <button class="nav-item" data-view="chat" id="nav-btn-chat">
+          <button class="nav-item" data-view="chat" id="nav-btn-chat" data-role-req="student">
             <span class="nav-item-icon">❓</span>
             <span class="nav-item-label">Ask Arya (AI Chat)</span>
           </button>
-        </nav>
-
-        <div class="nav-section-title">Growth & Tools</div>
-        <nav class="nav-item-list">
-          <button class="nav-item" data-view="analytics" id="nav-btn-analytics">
+          <button class="nav-item" data-view="analytics" id="nav-btn-analytics" data-role-req="student">
             <span class="nav-item-icon">📊</span>
             <span class="nav-item-label">Progress & Insights</span>
           </button>
-          <button class="nav-item" data-view="study-plan" id="nav-btn-study-plan">
+          <button class="nav-item" data-view="study-plan" id="nav-btn-study-plan" data-role-req="student">
             <span class="nav-item-icon">🗺️</span>
             <span class="nav-item-label">7-Day Study Plan</span>
           </button>
-          <button class="nav-item" data-view="notes" id="nav-btn-notes">
+          <button class="nav-item" data-view="notes" id="nav-btn-notes" data-role-req="student">
             <span class="nav-item-icon">📄</span>
             <span class="nav-item-label">Notes & PDF AI</span>
           </button>
-          <button class="nav-item" data-view="teacher" id="nav-btn-teacher">
-            <span class="nav-item-icon">👨‍🏫</span>
-            <span class="nav-item-label">Teacher Dashboard</span>
-          </button>
         </nav>
 
-        <div class="nav-section-title">School Administration</div>
-        <nav class="nav-item-list">
-          <button class="nav-item" data-view="admin" id="nav-btn-admin" style="border: 1px solid rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.08);">
+        <div class="nav-section-title" id="nav-title-admin">School Administration</div>
+        <nav class="nav-item-list" id="nav-list-admin">
+          <button class="nav-item" data-view="admin" id="nav-btn-admin" data-role-req="admin" style="border: 1px solid rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.08);">
             <span class="nav-item-icon">🏫</span>
             <span class="nav-item-label">School Admin Portal</span>
+            <span class="nav-badge-lock" id="badge-admin-lock">🔒 Staff</span>
+          </button>
+          <button class="nav-item" data-view="teacher" id="nav-btn-teacher" data-role-req="teacher">
+            <span class="nav-item-icon">👨‍🏫</span>
+            <span class="nav-item-label">Teacher Dashboard</span>
+            <span class="nav-badge-lock" id="badge-teacher-lock">🔒 Staff</span>
           </button>
         </nav>
       </div>
@@ -142,8 +151,8 @@
       <!-- Socratic Tutor Banner -->
       <div class="sidebar-tutor-banner">
         <div class="tutor-avatar-preview">👩‍🏫</div>
-        <h4>Arya Cloud AI</h4>
-        <p>Firebase Realtime Sync Active</p>
+        <h4>Arya Socratic AI</h4>
+        <p>Class 8 Mathematics Mentor</p>
       </div>
     </aside>
 
@@ -151,9 +160,170 @@
     <main class="app-main-viewport">
 
       <!-- =====================================================================
+           VIEW 0: HOMEPAGE / LANDING HUB
+           ===================================================================== -->
+      <section class="app-view active" id="view-home">
+        <!-- Hero Section -->
+        <div class="home-hero-card card-glass">
+          <div class="hero-content">
+            <div class="hero-badge">✨ Adaptive Socratic Mathematics • NCERT & CBSE Class 8</div>
+            <h1 class="hero-title">
+              Master Class 8 Mathematics <br>
+              <span class="text-gradient">With Arya AI Socratic Tutor</span>
+            </h1>
+            <p class="hero-subtitle">
+              Step-by-step interactive mathematical reasoning, hands-on balance scale simulations,
+              real-time error diagnosis, and comprehensive institutional analytics for schools.
+            </p>
+            
+            <div class="hero-action-buttons">
+              <button class="btn btn-primary btn-lg" id="home-hero-student-btn">
+                🎒 Enter Student Learning Arena
+              </button>
+              <button class="btn btn-outline btn-lg" id="home-hero-admin-btn" style="border-color: #34d399; color: #34d399;">
+                🏫 School Authority Portal
+              </button>
+            </div>
+          </div>
+          <div class="hero-visual-graphic">
+            <div class="hero-math-badge">⚖️ $2x + 5 = 17 \implies x = 6$</div>
+            <div class="hero-avatar-circle">👩‍🏫</div>
+            <div class="hero-streak-bubble">🔥 3-Day Mastery Streak</div>
+          </div>
+        </div>
+
+        <!-- Role Access Cards (Student vs School Authority) -->
+        <div class="home-portals-grid">
+          <!-- Student Portal Card -->
+          <div class="portal-card card-glass student-portal-card">
+            <div class="portal-card-header">
+              <div class="portal-icon-box student-icon">🎒</div>
+              <div>
+                <span class="portal-tag student-tag">For Class 8 Learners</span>
+                <h3 class="portal-title">Student Learning Arena</h3>
+              </div>
+            </div>
+            <p class="portal-desc">
+              Engage with interactive concepts, Socratic hint ladders, balance scale visualization,
+              and adaptive problem sets designed to build deep conceptual mastery without rote memorization.
+            </p>
+            <ul class="portal-features-list">
+              <li><span>✅</span> Interactive Balance Scale Equation Visualizer</li>
+              <li><span>✅</span> Socratic Hint Ladder (Multi-Level Guiding Prompts)</li>
+              <li><span>✅</span> 4 Core NCERT Chapters with 100+ Step-by-Step Problems</li>
+              <li><span>✅</span> Gamified XP, Daily Streaks, and Achievement Badges</li>
+            </ul>
+            <div class="portal-card-footer">
+              <button class="btn btn-primary btn-block" id="home-launch-student-btn">
+                Launch Student Arena ⚡
+              </button>
+            </div>
+          </div>
+
+          <!-- School Authority Portal Card -->
+          <div class="portal-card card-glass admin-portal-card">
+            <div class="portal-card-header">
+              <div class="portal-icon-box admin-icon">🏫</div>
+              <div>
+                <span class="portal-tag admin-tag">For Teachers & School Authorities</span>
+                <h3 class="portal-title">School Admin & Faculty Portal</h3>
+              </div>
+            </div>
+            <p class="portal-desc">
+              Empower educators and administrators with real-time cohort analytics, student roster tracking,
+              misconception heatmaps, automated PDF reports, and school-wide broadcast announcements.
+            </p>
+            <ul class="portal-features-list">
+              <li><span>✅</span> Comprehensive Class 8-A & 8-B Roster Tracking</li>
+              <li><span>✅</span> Concept Misconception Heatmap & Early Warning System</li>
+              <li><span>✅</span> Real-Time Broadcast Bulletin to All Student Dashboards</li>
+              <li><span>✅</span> Parent-Teacher Diagnostic Summary Reports</li>
+            </ul>
+            <div class="portal-card-footer">
+              <button class="btn btn-outline btn-block" id="home-launch-admin-btn" style="border-color: #34d399; color: #34d399;">
+                Access Authority Portal 📊
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Feature Highlights Grid -->
+        <div class="home-features-header">
+          <h2>🌟 Designed for Mathematical Intuition</h2>
+          <p>Why Arya AI Tutor delivers breakthrough results in middle school mathematics</p>
+        </div>
+
+        <div class="home-features-grid">
+          <div class="feature-box card-glass">
+            <div class="feature-box-icon">⚖️</div>
+            <h4>Visual Balance Simulation</h4>
+            <p>Understand the golden rule of algebra: what you do to one side, you must do to the other. Watch the scale tilt in real time.</p>
+          </div>
+          <div class="feature-box card-glass">
+            <div class="feature-box-icon">💡</div>
+            <h4>Socratic Diagnostic Hints</h4>
+            <p>Arya never spoils the solution. It diagnoses arithmetic, sign, and bracket errors, asking questions that lead you to "Aha!" moments.</p>
+          </div>
+          <div class="feature-box card-glass">
+            <div class="feature-box-icon">🗺️</div>
+            <h4>Adaptive 7-Day Study Roadmap</h4>
+            <p>Automatically generated revision plans targeting your weakest algebra concepts before chapter exams.</p>
+          </div>
+          <div class="feature-box card-glass">
+            <div class="feature-box-icon">📄</div>
+            <h4>Notes & Worksheet AI</h4>
+            <p>Paste classroom notes or math textbook paragraphs. Arya extracts algebraic identities and formulates targeted practice questions.</p>
+          </div>
+        </div>
+
+        <!-- Curriculum Syllabus Banner -->
+        <div class="home-curriculum-overview card-glass">
+          <div class="curriculum-overview-header">
+            <div>
+              <h3>📚 Class 8 Mathematics Syllabus Coverage</h3>
+              <p>Strictly aligned with NCERT & CBSE Class 8 Math learning outcomes</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" id="home-view-curriculum-btn">
+              Explore Full Curriculum →
+            </button>
+          </div>
+          <div class="curriculum-chips-grid">
+            <div class="curr-chip">
+              <span class="curr-chip-icon">1️⃣</span>
+              <div>
+                <strong>Linear Equations in One Variable</strong>
+                <small>Balance Method • Transposition • Parentheses & Fractions</small>
+              </div>
+            </div>
+            <div class="curr-chip">
+              <span class="curr-chip-icon">2️⃣</span>
+              <div>
+                <strong>Algebraic Expressions & Identities</strong>
+                <small>Monomials & Binomials • $(a+b)^2$, $(a-b)^2$, $(a^2-b^2)$</small>
+              </div>
+            </div>
+            <div class="curr-chip">
+              <span class="curr-chip-icon">3️⃣</span>
+              <div>
+                <strong>Factorisation & Division</strong>
+                <small>Common Factors • Regrouping Terms • Splitting Middle Term</small>
+              </div>
+            </div>
+            <div class="curr-chip">
+              <span class="curr-chip-icon">4️⃣</span>
+              <div>
+                <strong>Applied Word Problems</strong>
+                <small>Age Scenarios • Geometry & Perimeter • Consecutive Numbers</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
            VIEW 1: LEARN CONCEPTS
            ===================================================================== -->
-      <section class="app-view active" id="view-learn">
+      <section class="app-view" id="view-learn">
         <!-- Intelligent Suggestions Banner Container -->
         <div id="learn-suggestions-container"></div>
 
@@ -526,16 +696,28 @@
         <button class="modal-close">&times;</button>
       </div>
 
-      <!-- Role Selector -->
-      <div class="auth-role-picker">
-        <label class="role-radio-label">
-          <input type="radio" name="auth-role" value="student" checked>
-          <span>🎒 Student Portal</span>
+      <!-- Role Selector Tabs -->
+      <div class="auth-role-tabs">
+        <label class="auth-tab-card active" id="auth-tab-student">
+          <input type="radio" name="auth-role" value="student" checked style="display: none;">
+          <div class="tab-card-icon">🎒</div>
+          <div class="tab-card-body">
+            <strong>Student Account</strong>
+            <small>Class 8 Learner (XP & Streaks)</small>
+          </div>
         </label>
-        <label class="role-radio-label">
-          <input type="radio" name="auth-role" value="admin">
-          <span>🏫 School Authority</span>
+        <label class="auth-tab-card" id="auth-tab-admin">
+          <input type="radio" name="auth-role" value="admin" style="display: none;">
+          <div class="tab-card-icon">🏫</div>
+          <div class="tab-card-body">
+            <strong>School Authority</strong>
+            <small>Teacher / Admin (Cohort Analytics)</small>
+          </div>
         </label>
+      </div>
+
+      <div class="auth-role-desc" id="auth-role-desc" style="font-size: 0.84rem; color: var(--text-secondary); margin: 0.85rem 0 1.25rem; text-align: center; background: rgba(99, 102, 241, 0.08); padding: 0.65rem 0.85rem; border-radius: var(--radius-sm); border: 1px solid rgba(99, 102, 241, 0.2);">
+        🎒 Student Mode: Practice NCERT problems, track daily streaks, unlock level milestones, and ask Arya questions.
       </div>
 
       <!-- Google Sign-In Button -->
@@ -556,15 +738,15 @@
       <!-- Email / Password Form -->
       <form id="auth-email-form">
         <div class="form-group">
-          <label class="form-label">School or Personal Email</label>
+          <label class="form-label" id="auth-email-label">Student or School Email</label>
           <input type="email" class="form-input" id="auth-input-email" placeholder="name@school.edu" required>
         </div>
         <div class="form-group">
           <label class="form-label">Password</label>
           <input type="password" class="form-input" id="auth-input-password" placeholder="••••••••" required>
         </div>
-        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">
-          Sign In to Portal
+        <button type="submit" class="btn btn-primary" id="auth-submit-btn" style="width: 100%; margin-top: 0.5rem;">
+          Sign In to Student Portal
         </button>
       </form>
 
@@ -573,10 +755,10 @@
         <p>⚡ Quick Demonstration Accounts:</p>
         <div class="demo-btn-row">
           <button class="btn btn-sm btn-outline" id="demo-login-student">
-            🎒 Demo Student (Aarav)
+            🎒 Demo Student (Aarav - Class 8-A)
           </button>
-          <button class="btn btn-sm btn-outline" id="demo-login-admin">
-            🏫 Demo Admin (Dr. Sharma)
+          <button class="btn btn-sm btn-outline" id="demo-login-admin" style="border-color: #34d399; color: #34d399;">
+            🏫 Demo Admin (Dr. Sharma - Principal)
           </button>
         </div>
       </div>
@@ -615,12 +797,12 @@
     </div>
   </div>
 
-  <!-- 3. Settings Modal (AI API Key & Firebase Config) -->
+  <!-- 3. Settings Modal (AI API Key & Learner Preferences) -->
   <div class="modal-container" id="settings-modal">
     <div class="modal-backdrop"></div>
     <div class="modal-card">
       <div class="modal-header">
-        <h3>⚙️ AI Tutor & Cloud Settings</h3>
+        <h3>⚙️ AI Tutor & Learner Preferences</h3>
         <button class="modal-close">&times;</button>
       </div>
       <form id="settings-form">
@@ -644,45 +826,28 @@
           </label>
         </div>
 
-        <h4 style="color: #34d399; margin: 1.5rem 0 0.75rem 0;">🔥 Firebase Cloud Database & Vercel Sync</h4>
-        
-        <!-- Live Connection Status Card -->
-        <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 10px; padding: 0.85rem 1rem; margin-bottom: 1.25rem;">
-          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
-            <div>
-              <div style="font-weight: 600; font-size: 0.9rem;" id="settings-db-status-badge">🟢 Cloud Status: Ready</div>
-              <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.2rem;" id="settings-db-status-desc">
-                Synced with Cloud Firestore & Server REST endpoints.
-              </div>
-            </div>
-            <button type="button" class="btn btn-sm btn-outline" id="btn-test-firebase-conn" style="border-color: #34d399; color: #34d399;">
-              🧪 Test Connection
-            </button>
+        <h4 style="color: var(--accent-emerald); margin: 1.5rem 0 0.75rem 0;">🎯 Learner Preferences & Study Habits</h4>
+        <div class="form-group">
+          <label class="form-label">Daily Math Goal</label>
+          <select class="form-input" id="settings-daily-goal">
+            <option value="15">15 Minutes / Day (Casual Revision)</option>
+            <option value="30" selected>30 Minutes / Day (Recommended for Deep Mastery)</option>
+            <option value="45">45 Minutes / Day (Intensive Exam Prep)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Audio & Feedback</label>
+          <div style="display: flex; align-items: center; gap: 0.75rem; margin-top: 0.25rem;">
+            <input type="checkbox" id="settings-sound-toggle" style="width: 18px; height: 18px;" checked>
+            <label for="settings-sound-toggle" class="form-label" style="margin: 0; cursor: pointer;">
+              Play interactive audio effects for answers, streaks & level achievements
+            </label>
           </div>
-          <div id="settings-firebase-test-output" style="display: none; margin-top: 0.75rem; padding: 0.6rem; border-radius: 6px; font-size: 0.82rem; background: rgba(0,0,0,0.25);"></div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Firebase Project ID</label>
-          <input type="text" class="form-input" id="settings-firebase-project" placeholder="arya-788ea">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Firebase Web API Key</label>
-          <input type="password" class="form-input" id="settings-firebase-key" placeholder="AIzaSyDUvcDc3_-ikRFVgW...">
-          <div class="brand-tagline" style="margin-top: 0.35rem;">Leave empty to use automatic Vercel environment variables or demo cloud sync!</div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Firebase Auth Domain (Optional)</label>
-          <input type="text" class="form-input" id="settings-firebase-domain" placeholder="arya-788ea.firebaseapp.com">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Firebase App ID (Optional)</label>
-          <input type="text" class="form-input" id="settings-firebase-appid" placeholder="1:243810119050:web:940285e3aaa25c87c22c73">
         </div>
 
         <div style="text-align: right; margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 0.75rem;">
           <button type="button" class="btn btn-outline modal-close">Cancel</button>
-          <button type="submit" class="btn btn-primary">Save Settings</button>
+          <button type="submit" class="btn btn-primary">Save Preferences</button>
         </div>
       </form>
     </div>

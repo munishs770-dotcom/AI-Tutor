@@ -19,14 +19,15 @@ import { AdminPortal } from "./modules/admin-portal.js";
 class App {
   constructor() {
     this.state = StateManager.loadState();
+    this.state.profile.role = this.state.profile.role || "student";
     this.aiEngine = new AIEngine();
     this.soundManager = new SoundManager();
-    this.soundManager.enabled = this.state.settings.soundEffects;
+    this.soundManager.enabled = this.state.settings.soundEffects ?? true;
 
     this.firebaseService = new FirebaseService();
     this.adminPortal = new AdminPortal(this);
 
-    this.currentView = "learn";
+    this.currentView = "home";
     this.activeTopic = CURRICULUM[0];
     this.activeSubtopic = CURRICULUM[0].subtopics[0];
 
@@ -56,7 +57,9 @@ class App {
     this.applyTheme(this.state.settings.theme);
     this.setupAuth();
     this.updateHeaderUI();
+    this.updateNavigationForRole(this.state.profile.role);
     this.setupNavigation();
+    this.setupHomeView();
     this.setupModals();
     this.setupLearnView();
     this.setupPracticeView();
@@ -70,8 +73,8 @@ class App {
     this.setupBadgesModal();
     this.loadSuggestions();
 
-    // Default view: learn
-    this.switchView("learn");
+    // Default view: home landing hub
+    this.switchView("home");
 
     // Initialize balance scale widget
     setTimeout(() => {
@@ -81,8 +84,86 @@ class App {
     }, 100);
   }
 
+  // --- Home Landing Hub Setup ---
+  setupHomeView() {
+    // Brand Logo click navigates back to Home Hub
+    document.getElementById("brand-logo-btn")?.addEventListener("click", () => {
+      this.soundManager.playClick();
+      this.switchView("home");
+    });
+
+    // Hero action buttons
+    document.getElementById("home-hero-student-btn")?.addEventListener("click", () => {
+      this.soundManager.playClick();
+      this.switchView("learn");
+    });
+
+    document.getElementById("home-hero-admin-btn")?.addEventListener("click", () => {
+      this.soundManager.playClick();
+      const role = this.state.profile.role;
+      if (role === "admin" || role === "teacher") {
+        this.switchView("admin");
+      } else {
+        this.openLoginModal("admin");
+        this.showToast("Please sign in with verified School Authority credentials.", "info");
+      }
+    });
+
+    // Portal Cards Launch Buttons
+    document.getElementById("home-launch-student-btn")?.addEventListener("click", () => {
+      this.soundManager.playClick();
+      this.switchView("practice");
+    });
+
+    document.getElementById("home-launch-admin-btn")?.addEventListener("click", () => {
+      this.soundManager.playClick();
+      const role = this.state.profile.role;
+      if (role === "admin" || role === "teacher") {
+        this.switchView("admin");
+      } else {
+        this.openLoginModal("admin");
+        this.showToast("Please sign in with verified School Authority credentials.", "info");
+      }
+    });
+
+    document.getElementById("home-view-curriculum-btn")?.addEventListener("click", () => {
+      this.soundManager.playClick();
+      this.switchView("learn");
+    });
+  }
+
   // --- Authentication & Firebase Integration ---
   setupAuth() {
+    // Setup Role Selector Tabs in Login Modal
+    const tabStudent = document.getElementById("auth-tab-student");
+    const tabAdmin = document.getElementById("auth-tab-admin");
+    const roleDesc = document.getElementById("auth-role-desc");
+    const submitBtn = document.getElementById("auth-submit-btn");
+    const emailLabel = document.getElementById("auth-email-label");
+
+    const selectRole = (role) => {
+      const radio = document.querySelector(`input[name="auth-role"][value="${role}"]`);
+      if (radio) radio.checked = true;
+
+      if (role === "admin") {
+        tabAdmin?.classList.add("admin-active");
+        tabStudent?.classList.remove("active");
+        if (roleDesc) roleDesc.innerHTML = "🏫 <strong>School Authority Mode:</strong> Manage Class 8 cohorts, review at-risk diagnostics, view rosters, and broadcast school-wide announcements.";
+        if (submitBtn) submitBtn.textContent = "Sign In as School Authority";
+        if (emailLabel) emailLabel.textContent = "School Faculty / Admin Email";
+      } else {
+        tabStudent?.classList.add("active");
+        tabAdmin?.classList.remove("admin-active");
+        if (roleDesc) roleDesc.innerHTML = "🎒 <strong>Student Mode:</strong> Practice NCERT problems, track daily streaks, unlock level milestones, and ask Arya questions.";
+        if (submitBtn) submitBtn.textContent = "Sign In to Student Portal";
+        if (emailLabel) emailLabel.textContent = "Student or School Email";
+      }
+    };
+
+    tabStudent?.addEventListener("click", () => selectRole("student"));
+    tabAdmin?.addEventListener("click", () => selectRole("admin"));
+    this.selectAuthRole = selectRole;
+
     this.firebaseService.onAuthStateChanged((user) => {
       this.handleAuthStateChange(user);
     });
@@ -91,7 +172,7 @@ class App {
     if (openLoginBtn) {
       openLoginBtn.addEventListener("click", () => {
         this.soundManager.playClick();
-        this.openLoginModal();
+        this.openLoginModal("student");
       });
     }
 
@@ -100,7 +181,13 @@ class App {
       logoutBtn.addEventListener("click", async () => {
         this.soundManager.playClick();
         await this.firebaseService.signOut();
-        this.showToast("Signed out successfully.", "info");
+        this.state.profile.role = "student";
+        this.state.profile.name = "Guest Learner";
+        StateManager.saveState(this.state);
+        this.updateNavigationForRole("student");
+        this.updateHeaderUI();
+        this.switchView("home");
+        this.showToast("Signed out successfully. Returned to Home Hub.", "info");
       });
     }
 
@@ -115,7 +202,13 @@ class App {
           this.closeModal("login-modal");
           this.soundManager.playSuccess();
           ConfettiCannon.fire(2000);
-          this.showToast(`Welcome back, ${res.user.name}! Connected with Google.`, "success");
+          this.state.profile.role = role;
+          StateManager.saveState(this.state);
+          this.updateNavigationForRole(role);
+          this.showToast(`Welcome back, ${res.user.name}! (${role === 'admin' ? 'School Authority' : 'Student'})`, "success");
+          if (role === "admin") {
+            this.switchView("admin");
+          }
         } else {
           this.soundManager.playEncouragement();
           this.showToast(res.message || "Google Sign-In failed.", "error", 6000);
@@ -135,7 +228,13 @@ class App {
         if (res.success) {
           this.closeModal("login-modal");
           this.soundManager.playSuccess();
+          this.state.profile.role = role;
+          StateManager.saveState(this.state);
+          this.updateNavigationForRole(role);
           this.showToast(`Welcome ${res.user.name}! (${role === 'admin' ? 'School Authority' : 'Student'})`, "success");
+          if (role === "admin") {
+            this.switchView("admin");
+          }
         }
       });
     }
@@ -145,14 +244,21 @@ class App {
       await this.firebaseService.signInWithEmailPassword("aarav.sharma@dps.edu", "password123", "student");
       this.closeModal("login-modal");
       this.soundManager.playSuccess();
-      this.showToast("Logged in as Demo Student: Aarav Sharma", "success");
+      this.state.profile.role = "student";
+      StateManager.saveState(this.state);
+      this.updateNavigationForRole("student");
+      this.showToast("Logged in as Demo Student: Aarav Sharma (Class 8-A)", "success");
+      this.switchView("practice");
     });
 
     document.getElementById("demo-login-admin")?.addEventListener("click", async () => {
       await this.firebaseService.signInWithEmailPassword("dr.sharma@dps.edu", "admin123", "admin");
       this.closeModal("login-modal");
       this.soundManager.playSuccess();
-      this.showToast("Logged in as School Authority: Dr. Rajesh Sharma", "success");
+      this.state.profile.role = "admin";
+      StateManager.saveState(this.state);
+      this.updateNavigationForRole("admin");
+      this.showToast("Logged in as School Authority: Dr. Rajesh Sharma (Principal)", "success");
       this.switchView("admin");
     });
   }
@@ -161,7 +267,6 @@ class App {
     const loginBtn = document.getElementById("header-login-btn");
     const logoutBtn = document.getElementById("header-logout-btn");
     const userChip = document.getElementById("header-profile-btn");
-    const adminNavBtn = document.getElementById("nav-btn-admin");
 
     if (user) {
       if (loginBtn) loginBtn.style.display = "none";
@@ -169,34 +274,62 @@ class App {
       if (userChip) {
         userChip.style.display = "flex";
         document.getElementById("header-student-name").textContent = user.name;
-        document.getElementById("header-avatar").textContent = user.avatar || "🎓";
+        document.getElementById("header-avatar").textContent = user.avatar || (user.role === "admin" ? "🏫" : "🚀");
       }
 
       this.state.profile.name = user.name;
       this.state.profile.email = user.email;
-      this.state.profile.role = user.role;
+      this.state.profile.role = user.role || "student";
       StateManager.saveState(this.state);
-
-      // Show Admin Portal in Sidebar if user is admin
-      if (adminNavBtn) {
-        if (user.role === "admin") {
-          adminNavBtn.style.display = "flex";
-        } else {
-          adminNavBtn.style.display = "flex"; // Keep accessible for demonstration
-        }
-      }
+      this.updateNavigationForRole(this.state.profile.role);
     } else {
       if (loginBtn) loginBtn.style.display = "flex";
       if (logoutBtn) logoutBtn.style.display = "none";
       if (userChip) userChip.style.display = "flex";
+      this.updateNavigationForRole(this.state.profile.role || "student");
     }
 
     this.updateHeaderUI();
   }
 
-  openLoginModal() {
+  updateNavigationForRole(role) {
+    const badge = document.getElementById("header-role-badge");
+    const roleIcon = document.getElementById("role-icon");
+    const roleText = document.getElementById("role-text");
+    const badgeAdminLock = document.getElementById("badge-admin-lock");
+    const badgeTeacherLock = document.getElementById("badge-teacher-lock");
+    const navTitleAdmin = document.getElementById("nav-title-admin");
+
+    if (role === "admin") {
+      if (badge) badge.className = "header-role-pill role-admin";
+      if (roleIcon) roleIcon.textContent = "🏫";
+      if (roleText) roleText.textContent = "School Authority";
+      if (badgeAdminLock) badgeAdminLock.style.display = "none";
+      if (badgeTeacherLock) badgeTeacherLock.style.display = "none";
+      if (navTitleAdmin) navTitleAdmin.textContent = "School Administration (Active)";
+    } else if (role === "teacher") {
+      if (badge) badge.className = "header-role-pill role-admin";
+      if (roleIcon) roleIcon.textContent = "👨‍🏫";
+      if (roleText) roleText.textContent = "Faculty Member";
+      if (badgeAdminLock) badgeAdminLock.style.display = "none";
+      if (badgeTeacherLock) badgeTeacherLock.style.display = "none";
+      if (navTitleAdmin) navTitleAdmin.textContent = "Faculty Workspace (Active)";
+    } else {
+      if (badge) badge.className = "header-role-pill";
+      if (roleIcon) roleIcon.textContent = "🎒";
+      if (roleText) roleText.textContent = "Student Mode";
+      if (badgeAdminLock) badgeAdminLock.style.display = "inline-block";
+      if (badgeTeacherLock) badgeTeacherLock.style.display = "inline-block";
+      if (navTitleAdmin) navTitleAdmin.textContent = "School Administration";
+    }
+  }
+
+  openLoginModal(defaultRole = "student") {
     const modal = document.getElementById("login-modal");
-    if (modal) modal.classList.add("active");
+    if (modal) {
+      this.selectAuthRole?.(defaultRole);
+      modal.classList.add("active");
+    }
   }
 
   // --- Intelligent Suggestions Engine ---
@@ -333,7 +466,19 @@ class App {
   }
 
   switchView(viewName) {
+    // Route Guard for School Administration & Teacher Dashboard
+    if (viewName === "admin" || viewName === "teacher") {
+      const currentRole = this.state.profile.role;
+      if (currentRole !== "admin" && currentRole !== "teacher") {
+        this.soundManager.playEncouragement();
+        this.showToast("🔒 Restricted: School Admin & Faculty credentials required to access this portal.", "warning", 5000);
+        this.openLoginModal("admin");
+        return;
+      }
+    }
+
     this.currentView = viewName;
+    window.scrollTo({ top: 0, behavior: "smooth" });
 
     document.querySelectorAll(".nav-item").forEach((btn) => {
       if (btn.getAttribute("data-view") === viewName) {
@@ -374,42 +519,6 @@ class App {
       });
     });
 
-    // Cloud DB Header Status Button -> Opens Settings modal directly
-    const cloudHeaderBtn = document.getElementById("header-cloud-btn");
-    if (cloudHeaderBtn) {
-      cloudHeaderBtn.addEventListener("click", () => {
-        this.soundManager.playClick();
-        this.openSettingsModal();
-      });
-    }
-
-    // Test Firebase Connection Button in Settings
-    const testFbBtn = document.getElementById("btn-test-firebase-conn");
-    if (testFbBtn) {
-      testFbBtn.addEventListener("click", async () => {
-        this.soundManager.playClick();
-        const outputEl = document.getElementById("settings-firebase-test-output");
-        if (outputEl) {
-          outputEl.style.display = "block";
-          outputEl.style.color = "#38bdf8";
-          outputEl.innerHTML = "⏳ Testing Cloud Firestore connection...";
-        }
-
-        const res = await this.firebaseService.testFirestoreConnection();
-        if (outputEl) {
-          if (res.success) {
-            outputEl.style.color = "#34d399";
-            outputEl.innerHTML = `✅ <strong>Connected!</strong> ${res.message}`;
-            this.soundManager.playSuccess();
-          } else {
-            outputEl.style.color = "#f87171";
-            outputEl.innerHTML = `⚠️ <strong>Notice:</strong> ${res.message}`;
-            this.soundManager.playEncouragement();
-          }
-        }
-      });
-    }
-
     const profileForm = document.getElementById("profile-form");
     if (profileForm) {
       profileForm.addEventListener("submit", (e) => {
@@ -425,26 +534,6 @@ class App {
         this.saveSettingsFromForm();
       });
     }
-
-    // Listen for Firebase Connection status changes
-    this.firebaseService.onConnectionStateChanged((status) => {
-      const cloudIcon = document.getElementById("header-cloud-icon");
-      const cloudText = document.getElementById("header-cloud-text");
-      const statusBadge = document.getElementById("settings-db-status-badge");
-      const statusDesc = document.getElementById("settings-db-status-desc");
-
-      if (status.mode === "live") {
-        if (cloudIcon) cloudIcon.textContent = "🟢";
-        if (cloudText) cloudText.textContent = `Firestore: ${status.projectId}`;
-        if (statusBadge) statusBadge.innerHTML = `🟢 <strong>Live Cloud Firestore:</strong> ${status.projectId}`;
-        if (statusDesc) statusDesc.textContent = "Authenticated with live Google Firebase database. Real-time cloud sync active.";
-      } else {
-        if (cloudIcon) cloudIcon.textContent = "🟡";
-        if (cloudText) cloudText.textContent = "Cloud DB: Ready";
-        if (statusBadge) statusBadge.innerHTML = `🟡 <strong>Cloud DB:</strong> Hybrid Sync Active`;
-        if (statusDesc) statusDesc.textContent = "Synced with Express backend & local cache. Enter Firebase API Key for live Firestore.";
-      }
-    });
   }
 
   closeModal(modalId) {
@@ -471,7 +560,7 @@ class App {
     this.state.profile.studyGoals = goals;
     StateManager.saveState(this.state);
 
-    // Sync profile to cloud
+    // Sync profile to cloud database silently in background
     this.firebaseService.syncUserProfile({
       uid: this.firebaseService.currentUser?.uid || "usr_student",
       name,
@@ -481,7 +570,7 @@ class App {
 
     this.updateHeaderUI();
     this.closeModal("profile-modal");
-    this.showToast("Profile updated & synced to Cloud Database!", "success");
+    this.showToast("Profile updated successfully!", "success");
     this.soundManager.playSuccess();
   }
 
@@ -489,58 +578,48 @@ class App {
     const modal = document.getElementById("settings-modal");
     if (!modal) return;
     const s = this.state.settings;
-    document.getElementById("settings-gemini-key").value = s.geminiApiKey || "";
-    document.getElementById("settings-gemini-model").value = s.geminiModel || "gemini-1.5-flash";
-    document.getElementById("settings-live-api-toggle").checked = s.useLiveApi || false;
 
-    // Firebase Config inputs
-    const fb = this.firebaseService.config || {};
-    const fbKeyInput = document.getElementById("settings-firebase-key");
-    const fbProjInput = document.getElementById("settings-firebase-project");
-    const fbDomainInput = document.getElementById("settings-firebase-domain");
-    const fbAppIdInput = document.getElementById("settings-firebase-appid");
+    const geminiKeyInput = document.getElementById("settings-gemini-key");
+    const geminiModelInput = document.getElementById("settings-gemini-model");
+    const liveApiToggle = document.getElementById("settings-live-api-toggle");
+    const soundToggle = document.getElementById("settings-sound-toggle");
+    const dailyGoalSelect = document.getElementById("settings-daily-goal");
 
-    if (fbKeyInput) fbKeyInput.value = fb.apiKey || "";
-    if (fbProjInput) fbProjInput.value = fb.projectId || "ai-tutor-class8";
-    if (fbDomainInput) fbDomainInput.value = fb.authDomain || "";
-    if (fbAppIdInput) fbAppIdInput.value = fb.appId || "";
-
-    const outputEl = document.getElementById("settings-firebase-test-output");
-    if (outputEl) outputEl.style.display = "none";
+    if (geminiKeyInput) geminiKeyInput.value = s.geminiApiKey || "";
+    if (geminiModelInput) geminiModelInput.value = s.geminiModel || "gemini-1.5-flash";
+    if (liveApiToggle) liveApiToggle.checked = s.useLiveApi || false;
+    if (soundToggle) soundToggle.checked = s.soundEffects ?? true;
+    if (dailyGoalSelect) dailyGoalSelect.value = s.dailyGoal || "30";
 
     modal.classList.add("active");
   }
 
   saveSettingsFromForm() {
-    const key = document.getElementById("settings-gemini-key").value.trim();
-    const model = document.getElementById("settings-gemini-model").value;
-    const useLive = document.getElementById("settings-live-api-toggle").checked;
-
-    // Firebase settings
-    const fbKey = document.getElementById("settings-firebase-key")?.value.trim();
-    const fbProj = document.getElementById("settings-firebase-project")?.value.trim();
-    const fbDomain = document.getElementById("settings-firebase-domain")?.value.trim();
-    const fbAppId = document.getElementById("settings-firebase-appid")?.value.trim();
-
-    if (fbProj) {
-      this.firebaseService.saveFirebaseConfig({
-        apiKey: fbKey || "",
-        authDomain: fbDomain || `${fbProj}.firebaseapp.com`,
-        projectId: fbProj,
-        storageBucket: `${fbProj}.appspot.com`,
-        appId: fbAppId || ""
-      });
-    }
+    const key = document.getElementById("settings-gemini-key")?.value.trim() || "";
+    const model = document.getElementById("settings-gemini-model")?.value || "gemini-1.5-flash";
+    const useLive = document.getElementById("settings-live-api-toggle")?.checked || false;
+    const soundEnabled = document.getElementById("settings-sound-toggle")?.checked ?? true;
+    const dailyGoal = document.getElementById("settings-daily-goal")?.value || "30";
 
     this.state.settings.geminiApiKey = key;
     this.state.settings.geminiModel = model;
     this.state.settings.useLiveApi = useLive && key.length > 0;
+    this.state.settings.soundEffects = soundEnabled;
+    this.state.settings.dailyGoal = dailyGoal;
+
+    this.soundManager.enabled = soundEnabled;
     this.aiEngine.setApiKey(key, this.state.settings.useLiveApi);
     this.aiEngine.setModel(model);
 
+    // Update sound toggle button in header
+    const soundBtn = document.getElementById("sound-toggle-btn");
+    if (soundBtn) {
+      soundBtn.innerHTML = soundEnabled ? "🔊 Sound On" : "🔇 Sound Off";
+    }
+
     StateManager.saveState(this.state);
     this.closeModal("settings-modal");
-    this.showToast("Cloud Database & AI settings saved successfully!", "success");
+    this.showToast("Learner & AI preferences saved successfully!", "success");
     this.soundManager.playSuccess();
   }
 
