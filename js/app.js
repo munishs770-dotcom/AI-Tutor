@@ -116,6 +116,9 @@ class App {
           this.soundManager.playSuccess();
           ConfettiCannon.fire(2000);
           this.showToast(`Welcome back, ${res.user.name}! Connected with Google.`, "success");
+        } else {
+          this.soundManager.playEncouragement();
+          this.showToast(res.message || "Google Sign-In failed.", "error", 6000);
         }
       });
     }

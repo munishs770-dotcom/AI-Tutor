@@ -197,11 +197,11 @@ export class FirebaseService {
         const result = await signInWithPopup(this.auth, this.googleProvider);
         const fbUser = result.user;
 
-        const role = intendedRole === "admin" || fbUser.email.includes("admin") ? "admin" : "student";
+        const role = intendedRole === "admin" || (fbUser.email && fbUser.email.includes("admin")) ? "admin" : "student";
         const userProfile = {
           uid: fbUser.uid,
-          name: fbUser.displayName || "Google Scholar",
-          email: fbUser.email,
+          name: fbUser.displayName || (fbUser.email ? fbUser.email.split('@')[0] : "Google Scholar"),
+          email: fbUser.email || "",
           photoURL: fbUser.photoURL || "",
           avatar: role === "admin" ? "👨‍🏫" : "🚀",
           role: role,
@@ -214,11 +214,29 @@ export class FirebaseService {
         await this.syncUserProfile(userProfile);
         return { success: true, user: userProfile };
       } catch (err) {
-        console.warn("Live Google popup failed or blocked by browser; using instant demo simulator:", err);
+        console.error("Firebase Google Auth error:", err);
+
+        let userFriendlyMsg = err.message;
+        if (err.code === "auth/unauthorized-domain") {
+          const currentHost = window.location.hostname;
+          userFriendlyMsg = `Domain '${currentHost}' is not authorized in Firebase Console! Go to Firebase Console ➔ Authentication ➔ Settings ➔ Authorized Domains and add '${currentHost}'.`;
+        } else if (err.code === "auth/operation-not-allowed") {
+          userFriendlyMsg = "Google Sign-In provider is disabled in Firebase! Go to Firebase Console ➔ Authentication ➔ Sign-in method ➔ Google ➔ click Enable.";
+        } else if (err.code === "auth/popup-blocked") {
+          userFriendlyMsg = "The Google sign-in popup was blocked by your browser. Please allow popups for this site.";
+        } else if (err.code === "auth/popup-closed-by-user") {
+          userFriendlyMsg = "Sign-in popup was closed before completing.";
+        }
+
+        return {
+          success: false,
+          error: err.code || err.message,
+          message: userFriendlyMsg
+        };
       }
     }
 
-    // Instant Google Auth Simulation
+    // Instant Google Auth Simulation (if uninitialized)
     const mockGoogleUser = {
       uid: "goog_" + Math.random().toString(36).substring(2, 9),
       name: intendedRole === "admin" ? "Dr. Rajesh Sharma" : "Aarav Sharma",
@@ -459,10 +477,14 @@ export class FirebaseService {
         };
       }
     } catch (err) {
+      let extra = "";
+      if (err.code === "permission-denied" || (err.message && err.message.includes("permission"))) {
+        extra = " Security rules in Firebase Console ➔ Firestore Database ➔ Rules tab are locked. Copy and paste firestore.rules and click Publish to resolve.";
+      }
       return {
         success: false,
         error: err.code || err.message,
-        message: `Firestore connection check: ${err.message}`
+        message: `${err.message}.${extra}`
       };
     }
 

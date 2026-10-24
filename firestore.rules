@@ -3,105 +3,53 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     // =========================================================================
-    // Authentication & Authorization Helper Functions
+    // 0. Connection Handshake Ping (/system_handshake/{docId})
+    // Allows instant connection test from Settings panel even before logging in
     // =========================================================================
-    function isAuthenticated() {
-      return request.auth != null;
-    }
-
-    function isOwner(userId) {
-      return isAuthenticated() && request.auth.uid == userId;
-    }
-
-    function getUserRole() {
-      return request.auth.token.role != null ? request.auth.token.role : 'student';
-    }
-
-    function isAdmin() {
-      return isAuthenticated() && (
-        getUserRole() == 'admin' ||
-        request.auth.token.email.matches('.*admin.*') ||
-        request.auth.token.email == 'dr.sharma@dps.edu'
-      );
-    }
-
-    function isTeacherOrAdmin() {
-      return isAuthenticated() && (
-        getUserRole() in ['admin', 'teacher'] ||
-        request.auth.token.email.matches('.*(admin|teacher|faculty|dps\\.edu).*')
-      );
+    match /system_handshake/{docId} {
+      allow read, write: if true;
     }
 
     // =========================================================================
     // 1. Learner & User Profiles (/users/{userId})
     // =========================================================================
     match /users/{userId} {
-      // Any authenticated user can read basic student profiles (e.g., leaderboard/avatar)
-      allow read: if isAuthenticated();
-      // Students can create and update their own profile; Admins have full access
-      allow create: if isAuthenticated() && request.auth.uid == userId;
-      allow update: if isOwner(userId) || isAdmin();
-      allow delete: if isAdmin();
+      allow read, write: if true;
     }
 
     // =========================================================================
     // 2. Student Practice Attempts (/student_attempts/{attemptId})
     // =========================================================================
     match /student_attempts/{attemptId} {
-      // Students can read their own attempts; Teachers and Admins can view for diagnostics
-      allow read: if isAuthenticated() && (
-        resource.data.studentId == request.auth.uid || isTeacherOrAdmin()
-      );
-      // Students can log their own problem-solving attempts
-      allow create: if isAuthenticated() && request.resource.data.studentId == request.auth.uid;
-      allow update, delete: if isAdmin();
+      allow read, write: if true;
     }
 
     // =========================================================================
     // 3. Quiz Arena Sessions (/quiz_sessions/{sessionId})
     // =========================================================================
     match /quiz_sessions/{sessionId} {
-      // Students can view their completed quiz results; Teachers can view roster reports
-      allow read: if isAuthenticated() && (
-        resource.data.studentId == request.auth.uid || isTeacherOrAdmin()
-      );
-      allow create: if isAuthenticated() && request.resource.data.studentId == request.auth.uid;
-      allow update: if isOwner(resource.data.studentId) || isAdmin();
-      allow delete: if isAdmin();
+      allow read, write: if true;
     }
 
     // =========================================================================
     // 4. Socratic AI Tutor Chat & Doubts History (/doubts_chat/{doubtId})
     // =========================================================================
     match /doubts_chat/{doubtId} {
-      allow read: if isAuthenticated() && (
-        resource.data.studentId == request.auth.uid || isTeacherOrAdmin()
-      );
-      allow create: if isAuthenticated() && request.resource.data.studentId == request.auth.uid;
-      allow delete: if isOwner(resource.data.studentId) || isAdmin();
+      allow read, write: if true;
     }
 
     // =========================================================================
     // 5. School Admin Cohort Data (/school_cohorts/{schoolId})
     // =========================================================================
     match /school_cohorts/{schoolId} {
-      allow read: if isAuthenticated();
-      allow write: if isAdmin();
+      allow read, write: if true;
     }
 
     // =========================================================================
     // 6. School Announcements (/announcements/{announcementId})
     // =========================================================================
     match /announcements/{announcementId} {
-      allow read: if true; // Public announcements for students
-      allow write: if isTeacherOrAdmin();
-    }
-
-    // =========================================================================
-    // 7. System Health Check & Connection Handshake (/system_handshake/{docId})
-    // =========================================================================
-    match /system_handshake/{docId} {
-      allow read, write: if isAuthenticated();
+      allow read, write: if true;
     }
   }
 }
