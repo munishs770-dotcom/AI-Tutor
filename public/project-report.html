@@ -258,13 +258,17 @@ tbody td { padding:3px 7px; border-bottom:1px solid var(--border); vertical-alig
   <div class="cover-title">Arya AI Tutor</div>
   <div class="cover-subtitle">Class 8 Mathematics Personalized Learning Assistant with Firebase Cloud Database, Google Gemini AI &amp; Vercel Serverless Architecture</div>
   <div class="cover-divider"></div>
-  <div class="cover-meta-grid">
+  <div class="cover-meta-grid" style="margin-bottom: 12px;">
     <div class="cover-meta-item"><div class="label">Project Title</div><div class="value">AI Tutor: Personalized Learning Assistant</div></div>
     <div class="cover-meta-item"><div class="label">Target Subject</div><div class="value">Class 8 Mathematics (Algebra &amp; Equations)</div></div>
     <div class="cover-meta-item"><div class="label">Target Audience</div><div class="value">Students Aged 12–15 (NCERT / CBSE / ICSE)</div></div>
     <div class="cover-meta-item"><div class="label">Academic Cohort</div><div class="value">IIT Patna B3 • October 2026</div></div>
-    <div class="cover-meta-item"><div class="label">Backend &amp; Database</div><div class="value">Firebase Cloud Firestore + Security Rules</div></div>
-    <div class="cover-meta-item"><div class="label">Deployment Platform</div><div class="value">Vercel Serverless + Express REST API</div></div>
+    <div class="cover-meta-item"><div class="label">Live Vercel Deployment</div><div class="value" style="color:#67e8f9;"><a href="https://ai-tutor-olive-delta.vercel.app/" target="_blank" style="color:#67e8f9; text-decoration:underline; font-weight:700;">ai-tutor-olive-delta.vercel.app</a></div></div>
+    <div class="cover-meta-item"><div class="label">GitHub Repository</div><div class="value" style="color:#c7d2fe;"><a href="https://github.com/munishs770-dotcom/AI-Tutor.git" target="_blank" style="color:#c7d2fe; text-decoration:underline; font-weight:700;">munishs770-dotcom/AI-Tutor</a></div></div>
+  </div>
+  <div style="background:rgba(99,102,241,0.22); border:1px solid rgba(99,102,241,0.45); border-radius:10px; padding:7px 18px; margin:0 auto 16px; max-width:540px; display:flex; justify-content:center; gap:18px; font-size:8.2pt;">
+    <span>🌐 <strong>Live Web App:</strong> <a href="https://ai-tutor-olive-delta.vercel.app/" target="_blank" style="color:#38bdf8; text-decoration:underline; font-weight:700;">https://ai-tutor-olive-delta.vercel.app/</a></span>
+    <span>💻 <strong>GitHub Code:</strong> <a href="https://github.com/munishs770-dotcom/AI-Tutor.git" target="_blank" style="color:#a78bfa; text-decoration:underline; font-weight:700;">munishs770-dotcom/AI-Tutor.git</a></span>
   </div>
   <div class="cover-tags">
     <span class="cover-tag">🤖 Google Gemini AI</span>
@@ -321,8 +325,9 @@ tbody td { padding:3px 7px; border-bottom:1px solid var(--border); vertical-alig
     <div class="stat-card"><div class="stat-value" style="color:#f43f5e;">&lt;40ms</div><div class="stat-label">Median API Latency</div></div>
   </div>
 
-  <div class="info-box">
-    <strong>Document Purpose:</strong> This document serves as the comprehensive capstone engineering report for the <strong>Arya AI Tutor</strong> platform. It provides complete pedagogical, architectural, cryptographic, algorithmic, and operational documentation of the system.
+  <div class="info-box" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+    <div><strong>🌐 Live Web App:</strong> <a href="https://ai-tutor-olive-delta.vercel.app/" target="_blank" style="color:#2563eb; text-decoration:underline; font-weight:700;">https://ai-tutor-olive-delta.vercel.app/</a></div>
+    <div><strong>💻 GitHub Repository:</strong> <a href="https://github.com/munishs770-dotcom/AI-Tutor.git" target="_blank" style="color:#4f46e5; text-decoration:underline; font-weight:700;">munishs770-dotcom/AI-Tutor.git</a></div>
   </div>
 
   <div class="page-footer"><span>Arya AI Tutor — Comprehensive Capstone Project Report</span><span>Page 2 of 20</span></div>
@@ -462,6 +467,8 @@ tbody td { padding:3px 7px; border-bottom:1px solid var(--border); vertical-alig
       <div class="arch-layer-label">📱 Client Tier</div>
       <div class="arch-items">
         <span class="arch-chip">Vanilla ES6 SPA (index.html)</span>
+        <span class="arch-chip purple">Home Hub (#view-home)</span>
+        <span class="arch-chip purple">RBAC Route Guards</span>
         <span class="arch-chip">Cosmic Glassmorphism (styles.css)</span>
         <span class="arch-chip cyan">SVG Balance Scale Engine</span>
         <span class="arch-chip cyan">Canvas Math Scratchpad</span>
@@ -1109,6 +1116,11 @@ beamElement.style.transform = <span class="str">`rotate(${tiltAngle}deg)`</span>
 
   <h3>13.1 Cloud Deployment Architecture</h3>
   <p>The platform is configured for production hosting on <strong>Vercel</strong>. Vercel's global Edge Network serves all static client assets (HTML, CSS, JS, SVG icons) with global CDN caching, while the backend API is routed to serverless function instances defined in <code>api/index.js</code>.</p>
+  
+  <div class="success-box" style="margin: 6px 0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+    <div><strong>🌐 Live Production Web App:</strong> <a href="https://ai-tutor-olive-delta.vercel.app/" target="_blank" style="color:#059669; text-decoration:underline; font-weight:700;">https://ai-tutor-olive-delta.vercel.app/</a></div>
+    <div><strong>💻 GitHub Source Repository:</strong> <a href="https://github.com/munishs770-dotcom/AI-Tutor.git" target="_blank" style="color:#4f46e5; text-decoration:underline; font-weight:700;">munishs770-dotcom/AI-Tutor.git</a></div>
+  </div>
 
   <h3>13.2 Vercel Routing Configuration (<code>vercel.json</code>)</h3>
   <div class="code-block">
@@ -1192,10 +1204,11 @@ beamElement.style.transform = <span class="str">`rotate(${tiltAngle}deg)`</span>
   <h3>14.3 Mathematical Typography &amp; KaTeX Integration</h3>
   <p>To eliminate jagged text formulas like <code>2x + 5 = 17 / 3</code>, all mathematical notation is processed via the <strong>KaTeX CDN engine</strong>. KaTeX renders clean, publication-grade LaTeX formulas ($2x + 5 = \frac{17}{3}$) with sub-millisecond execution times, zero layout shifts, and full mathematical accessibility.</p>
 
-  <h3>14.4 Complete 9-View Application Inventory</h3>
+  <h3>14.4 Complete 10-View Application Inventory</h3>
   <table>
     <thead><tr><th>View ID</th><th>View Title</th><th>Icon</th><th>Primary Interactive Components</th></tr></thead>
     <tbody>
+      <tr><td><code>view-home</code></td><td>Home Hub</td><td>🏠</td><td>Comprehensive curriculum launchpad, dual-role entry portals (Student vs School Authority), streak dashboard.</td></tr>
       <tr><td><code>view-learn</code></td><td>Learn Concepts</td><td>🎓</td><td>Curriculum navigation tree, interactive SVG Balance Scale, Worked Examples, Understanding Checkpoints.</td></tr>
       <tr><td><code>view-practice</code></td><td>Practice Arena</td><td>✍️</td><td>Procedural problem card, 3-tier progressive hint ladder, digital whiteboard scratchpad, diagnostic evaluator.</td></tr>
       <tr><td><code>view-quiz</code></td><td>Quiz Arena</td><td>🏆</td><td>5-question timed challenge, randomized distractor grid, live stopwatch, confetti cannon, score breakdown.</td></tr>
@@ -1453,36 +1466,32 @@ beamElement.style.transform = <span class="str">`rotate(${tiltAngle}deg)`</span>
     <li>Sweller, J. (1988). <em>Cognitive Load During Problem Solving: Effects on Learning.</em> Cognitive Science, 12(2), 257–285.</li>
   </ol>
 
-  <h3>18.2 Technical Documentation References</h3>
+  <h3>18.2 Technical Documentation &amp; Live Artifacts</h3>
   <ol>
+    <li><strong>Production Live Web Application:</strong> <a href="https://ai-tutor-olive-delta.vercel.app/" target="_blank" style="color:#2563eb; text-decoration:underline; font-weight:700;">https://ai-tutor-olive-delta.vercel.app/</a></li>
+    <li><strong>GitHub Source Code Repository:</strong> <a href="https://github.com/munishs770-dotcom/AI-Tutor.git" target="_blank" style="color:#2563eb; text-decoration:underline; font-weight:700;">https://github.com/munishs770-dotcom/AI-Tutor.git</a></li>
     <li>Google Cloud. (2024). <em>Google Gemini 1.5 Flash API Documentation.</em> https://ai.google.dev/docs</li>
     <li>Google Firebase. (2024). <em>Cloud Firestore Security Rules &amp; Realtime Data Sync v10.</em> https://firebase.google.com/docs/firestore</li>
     <li>Vercel. (2024). <em>Vercel Serverless Functions &amp; Express Configuration Guide.</em> https://vercel.com/docs/functions</li>
-    <li>KaTeX. (2024). <em>KaTeX v0.16.8 — High-Performance LaTeX Typesetting for the Web.</em> https://katex.org/</li>
   </ol>
 
-  <h3>18.3 Complete Project File Manifest (21 Files)</h3>
+  <h3>18.3 Complete Project File Manifest</h3>
   <table>
     <thead><tr><th>File Name</th><th>Type</th><th>Size</th><th>Architectural Purpose</th></tr></thead>
     <tbody>
-      <tr><td><code>index.html</code></td><td>HTML5 SPA</td><td>32 KB</td><td>Core single-page application shell: 9 views, 4 modals, KaTeX math rendering, sound toggles.</td></tr>
+      <tr><td><code>index.html</code></td><td>HTML5 SPA</td><td>43 KB</td><td>Core single-page application: 10 views, 4 modals, KaTeX rendering, audio toggles.</td></tr>
+      <tr><td><code>SYSTEM_ARCHITECTURE.md</code></td><td>Markdown</td><td>14 KB</td><td>Comprehensive system design, component hierarchy, and Socratic state machines.</td></tr>
+      <tr><td><code>DATABASE_ARCHITECTURE.md</code></td><td>Markdown</td><td>11 KB</td><td>Firestore schema models, offline cache protocol, indexes, and write-through sync.</td></tr>
+      <tr><td><code>FIREBASE_ARCHITECTURE.md</code></td><td>Markdown</td><td>10 KB</td><td>Firebase project setup (arya-788ea), auth pipelines, and security rules.</td></tr>
       <tr><td><code>css/styles.css</code></td><td>Vanilla CSS</td><td>44 KB</td><td>Cosmic glassmorphism design system, dark/light themes, animations, responsive grid.</td></tr>
-      <tr><td><code>js/app.js</code></td><td>ES6 JavaScript</td><td>55 KB</td><td>Master application controller orchestrating views, events, audio, and state synchronization.</td></tr>
-      <tr><td><code>server.js</code></td><td>Node.js Express</td><td>11 KB</td><td>Backend REST API: 12 endpoints, school cohorts, Gemini AI proxy, static file server.</td></tr>
-      <tr><td><code>api/index.js</code></td><td>Serverless</td><td>0.2 KB</td><td>Vercel serverless function entrypoint wrapping Express backend for cloud execution.</td></tr>
-      <tr><td><code>vercel.json</code></td><td>Configuration</td><td>0.3 KB</td><td>Vercel deployment configuration, asset routing, and serverless API rewrites.</td></tr>
-      <tr><td><code>firestore.rules</code></td><td>Security</td><td>3.5 KB</td><td>Production security rules enforcing RBAC permissions across all Firestore collections.</td></tr>
-      <tr><td><code>firebase.json</code></td><td>Configuration</td><td>0.5 KB</td><td>Firebase CLI hosting and composite Firestore query indexes configuration.</td></tr>
-      <tr><td><code>firestore.indexes.json</code></td><td>Database</td><td>0.8 KB</td><td>Firestore composite query indexes for student attempts and leaderboards.</td></tr>
-      <tr><td><code>js/modules/firebase-service.js</code></td><td>JS Module</td><td>7 KB</td><td>Firebase Auth (Google/Email), Cloud Firestore sync, connection tester, and CRUD.</td></tr>
+      <tr><td><code>js/app.js</code></td><td>ES6 JavaScript</td><td>64 KB</td><td>Master controller: view routing, RBAC route guards, audio, and state orchestration.</td></tr>
+      <tr><td><code>server.js</code></td><td>Node.js Express</td><td>14 KB</td><td>Backend REST API: 12 endpoints, school cohorts, Gemini AI proxy, static server.</td></tr>
+      <tr><td><code>firestore.rules</code></td><td>Security</td><td>2.3 KB</td><td>Production security rules enforcing RBAC permissions across all Firestore collections.</td></tr>
+      <tr><td><code>js/modules/firebase-service.js</code></td><td>JS Module</td><td>9 KB</td><td>Firebase Auth (Google/Email), Cloud Firestore sync, connection tester, and CRUD.</td></tr>
       <tr><td><code>js/modules/ai-engine.js</code></td><td>JS Module</td><td>14 KB</td><td>Dual-brain AI engine: Google Gemini 1.5 Flash proxy + 200+ offline Socratic templates.</td></tr>
       <tr><td><code>js/modules/problem-generator.js</code></td><td>JS Module</td><td>29 KB</td><td>Procedural math generator: answer-first algorithm, 10 problem types, hint ladder.</td></tr>
-      <tr><td><code>js/modules/admin-portal.js</code></td><td>JS Module</td><td>11 KB</td><td>School admin portal: KPI dashboard, roster, broadcast tool, CSV gradebook export.</td></tr>
+      <tr><td><code>js/modules/admin-portal.js</code></td><td>JS Module</td><td>13 KB</td><td>School admin portal: KPI dashboard, roster, broadcast tool, CSV gradebook export.</td></tr>
       <tr><td><code>js/modules/balance-scale.js</code></td><td>JS Module</td><td>8 KB</td><td>Interactive SVG physics balance scale for visual equation manipulation.</td></tr>
-      <tr><td><code>js/modules/analytics.js</code></td><td>JS Module</td><td>6 KB</td><td>HTML5 Canvas mastery charts and 7-day personalized study roadmap generator.</td></tr>
-      <tr><td><code>js/modules/gamification.js</code></td><td>JS Module</td><td>7 KB</td><td>XP progression, 10 badges, Web Audio synthesizer, confetti cannon.</td></tr>
-      <tr><td><code>js/modules/state.js</code></td><td>JS Module</td><td>6 KB</td><td>Client state manager, profile persistence, and Firestore sync queues.</td></tr>
-      <tr><td><code>js/modules/whiteboard.js</code></td><td>JS Module</td><td>3 KB</td><td>Digital canvas math scratchpad with pen, colors, and eraser.</td></tr>
       <tr><td><code>js/data/curriculum.js</code></td><td>JS Data</td><td>16 KB</td><td>Class 8 NCERT Mathematics curriculum: 4 chapters, 15+ subtopics, worked examples.</td></tr>
     </tbody>
   </table>
