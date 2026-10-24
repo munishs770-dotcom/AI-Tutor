@@ -1,10 +1,10 @@
 {
   "name": "ai-tutor-project",
   "version": "1.0.0",
-  "description": "Arya AI Tutor - Class 8 Mathematics Personalized Learning Assistant",
+  "main": "server.js",
   "scripts": {
-    "start": "node server/app.js",
-    "dev": "node server/app.js"
+    "start": "node server.js",
+    "dev": "node server.js"
   },
   "keywords": [
     "ai-tutor",
